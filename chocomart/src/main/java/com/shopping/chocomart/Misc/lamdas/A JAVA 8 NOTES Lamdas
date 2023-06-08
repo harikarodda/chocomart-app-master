@@ -1,0 +1,170 @@
+JAVA8 -> DURGA SW VIDEOS
+Lamdas======> can be used wherever we have functionalinterface
+Functional interface--> must have ONLY 1 abstract method , (any static/default methods)
+
+examples: Comparator interface, runnable interface, etc
+
+SAM-SIngle Abstract Method ===>Lamdas
+SYNTAXES
+(a,b)-> a*b;        GOOD
+a,b-> a*b;          WRONG
+(a,b)-> return a*b; WRONG
+(a,b)-> {return a*b};WRONG (; INSIDE MISSING)
+(a,b)-> {return a*b;}GOOD
+(a)-> a*a;           GOOD
+a-> a*a;               GOOD
+
+================Anonymous InnerClass ========
+-->might appear like lamdas but they arent
+more powerful than lamdas
+if interface has two abstract methods---> cannot use Lamdas for this interface implementation using lamdas
+
+===============>
+Defualt methods:
+*****Purpose: without impacting any classes that are implementing a interface....how to add new method ??
+default method lets us add new method that will be available for implementation calsses
+default method can be used directly from interface description //or override
+
+RULE TO REMEBER For default --> like hashcode() method cannot be included as default method
+Implementation class (class ABC imolements InterfaceXYZ)
+Class ABC is a child of object calss
+so the object class methods are already available to class ABC (implementation class)--> so we dont have to make it available again through default methods
+ error- overrides method of java.lang.object
+CANNOT OVERRRIDE /IMPLEMENT Object class methods as Default methods
+
+
+Multiple Inheritance================>
+
+Java supports multiple inheritance
+p1   p2
+  Child
+
+  Child EXTENDS p1,p2 ==> not allowed-==> compiler error
+
+class P1{
+public void m1(){sout("method from p1"}
+}
+class P2{
+ public void m1(){sout("method from p2"}
+}
+
+public class Test extends P1, P2{
+psvmain(String[] args){
+Test t= new test();
+t.m1()
+}
+ ==>which one will be called==> p1.m1() or p2.m1() ??? ====> diamond problem    ==>so multiple inheritance is not allowed
+
+------------IMPLEMENTS---- (see interface have defualt methods,not regular methods)
+Interface Left{
+    DEFAULT void m1(){sout("method from p1"}
+}
+Interface Right{
+     DEFAULT void m1(){sout("method from p2"}
+}
+
+public class Test IMPLEMENTS Left, Right{
+//override here
+ public void m1(){
+ sout("method from own");
+ }
+ psvmain(String[] args){
+    Test t= new test();
+    t.m1();
+} //will return "method from own"
+}
+
+//if i want left interface result
+public class Test IMPLEMENTS Left, Right{
+    //override here
+ public void m1(){
+  Left.super.m1();
+ }
+    psvmain(String[] args){
+    Test t= new test();
+    t.m1();
+} //will return "method from own"
+
+================
+purpose of STATIC methods inside interface
+
+In general, static methods are unrelated to objects.
+Classes are costly than interfaces
+so to cost eliminate,we can have static methods inside Interface
+
+Main this to remember is
+@1 static methods are not readily available in implementation class
+        ==> ONLY way to call is interfaceName.staticMethodName()
+@2 even if class didnt implement interface-
+    it can access the static method of interface by direct reference of interfaceName.staticMethodName()
+@3 concept of static inside interfaces are mainly useful for the utility classes (no need of creating objects)
+@4 **** since static are allowed from java 8---> WE ARE ALLOWED TO RUN MAIN METHOD FROM INTERFACE
+interface TestInterf{
+static void print(){ sout("hey"); }
+}
+class ABC implements TestInterf{
+psvm(String Args[]){
+TestInterf.print()}
+}
+}
+class XYZ{
+psvm(String Args[]){
+TestInterf.print()}
+}
+}
+
+
+
+===================================
+GENERIC:
+
+interface Testinterface{
+ method m1(String s);
+ }
+
+ class ImplementationClass implements i{
+ method m1(String s)
+ {
+ //..implementation...
+ sout("text here"+ s);
+ }
+
+ class Usage {
+ publis static void main(String aregs[]){
+    ImplementationClass ic= new ImplementationClass();
+    ic.m1("abc");
+ }
+
+=========LAMDAS=====================
+
+@functionalInterface
+interface i{
+ method m1();
+ }
+ class Usage {
+  publis static void main(String aregs[]){
+     Testinterface tic= (s)->sout("text here"+ s);
+     tic.m1("abc");
+     tic.m1("bcd);
+  }
+
+  ===========Anonymous Inner class===============
+
+  Interface Myinterface{
+  method m1();
+  method m2();
+  }
+
+Myinterface i1=new Myinterface(){
+//implement both methods directly
+    method m1(){....};
+    method m2(){....};
+}
+
+Myinterface i1=new Myinterface(){
+//implement both methods directly
+    method m1(){....};
+    method m2(){....};
+}
+
+

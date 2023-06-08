@@ -1,0 +1,59 @@
+
+difference between a EnumSet and a HashSet?
+An EnumSet is a collection in Java that stores elements of a defined enum type as bit vectors.
+A HashSet stores elements in a hash table based on their hash codes. An EnumSet is normally used to
+work with enums, while a HashSet can be used with any type of object. An EumSet works faster than
+the HashSet as it is a high performing set implementation.
+Also, EnumSet doesn’t compute any hashCode to find the right bucket
+
+A HashMap uses strong references to keys, whereas a WeakHashMap uses weak references.
+WeakHashMap allows the garbage collector to free up memory when the key is no longer referenced.
+When it is advisable to let the garbage collector release memory when the key is no longer required,
+a WeakHashMap is often used.
+
+
+
+CONCURRENTHASHMAP==> "lock striping"
+
+Thread 1        Thread 2         Thread 3
+
+Bucket 1 |        |                |
+Bucket 2 |        |     Write      |
+Bucket 3 |        | <------------ |
+Bucket 4 |  Read  |                |
+Bucket 5 |        |                |
+Bucket 6 |        |                |
+Bucket 7 |        |                |
+Bucket 8 |        |                |
+Bucket 9 |        |                |
+
+Each bucket has its own lock, and the ConcurrentHashMap uses """"lock striping""" to divide the map into several segments,
+and each segment has its own lock.
+
+
+So when a thread wants to read or write to a specific bucket, it first acquires the lock for that bucket's segment.
+
+This ensures that only one thread can modify the data in that segment at a time, while still allowing multiple threads to read from different buckets concurrently, as long as they are in different segments.
+
+The lock striping technique effectively reduces the contention for locks, which leads to better performance and scalability compared to a simple global lock.
+
+ConcurrentHashMap ensures thread-safety by dividing the map into multiple segments,
+        // with each segment being guarded by its own lock. It uses a technique called "lock striping" to divide the map into smaller segments, each of which is guarded by a separate lock.
+        // This allows multiple threads to access different segments of the map concurrently without blocking each othe
+MUST READ: https://javarevisited.blogspot.com/2013/02/concurrenthashmap-in-java-example-tutorial-working.html#axzz8075xpQHn
+"ConcurrentHashMap putifAbsent example in Java"
+
+
+ConcurrentHashMap is best suited when you have multiple readers and a few writers.
+ If writers outnumber the reader, or the writer is equal to the reader,
+ then the performance of ConcurrentHashMap effectively reduces to synchronized map or Hashtable.
+
+Read more: https://javarevisited.blogspot.com/2013/02/concurrenthashmap-in-java-example-tutorial-working.html#ixzz80CQ3Kv49
+
+Why ConcurrentHashMap does not allow null keys and null values ?
+//HashCodeOperations-see test2,test3
+AMBIGUITY if actually key existed with value paired as null OR if the key doesnt Exist --to avoid this, we dont allow null in keys
+
+null as values=> this will require lock on entire hashmap to avoid any unwanted exception &
+read safety operation- cost is more-rather best to
+not allow the null values itself
